@@ -1,3 +1,8 @@
+## Методы оптимизации
+## Текущая версия 1.0
+
+
+
 from odenarium import *
 from sympy import diff, Symbol, solve
 from math import *
@@ -86,7 +91,7 @@ class Dual_iteration:
                     elif self.Method == 3:
                         self.newton()
                     break
-            if not needwork():
+            if not YorN("\nПродолжить работу с программой? (Yes/No) "):
                 break
 
     def ChangeDualFunction(self):
