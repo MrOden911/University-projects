@@ -1,15 +1,14 @@
-from odenarium import erprint
 from sympy.parsing.sympy_parser import parse_expr
 
 def inFu(text='Введите: ',feedback='Функция задана неверно!'):
-        C=False
+        C = False
         while True:
-            Z=input(text)
+            Z = input(text)
             try:
-                Z=parse_expr(Z)
-                C=False
+                Z = parse_expr(Z)
+                C = False
             except:
                 print(feedback)
-                C=True
-            if C==False:
+                C = True
+            if not C:
                 return Z

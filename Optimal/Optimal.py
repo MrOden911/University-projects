@@ -1,13 +1,15 @@
-## Методы оптимизации
-## Текущая версия 1.0
+# Методы оптимизации
+# Текущая версия 1.0
 
-##TODO Оставив функционал выбора переменных функции, ограничить доступ пользователя к коду. Избавиться от "exec".
+# TODO Оставив функционал выбора переменных функции, ограничить доступ пользователя к коду. Избавиться от "exec".
 
-from odenarium import *
-from sympy import diff, Symbol, solve
 from math import *
-from numpy.linalg import inv, det
+
 from numpy import dot, array
+from numpy.linalg import inv, det
+from sympy import diff, Symbol, solve
+
+from odenarium import warprint, inFu, inN0, YorN, inN, invar, inFl, erprint
 
 
 class Dual_iteration:
@@ -48,8 +50,8 @@ class Dual_iteration:
 '''.format(Methods[3], self.StartPoint))
                 if YorN('Изменить параметры? (Yes/No) '):
                     while True:
-                        i = inN0('Введите номер изменяемого параметра, или "0" для сохранения параметров: ',
-                            'Введен неверный номер!')
+                        i = inN0('\nВведите номер изменяемого параметра, или "0" для сохранения параметров: ',
+                                 "Введен неверный номер!")
                         if i == 0:
                             break
                         elif i == 1:
@@ -144,7 +146,7 @@ class Dual_iteration:
         Pry = self.Pry
         exec(Prx + '=Symbol(Prx)')
         exec(Pry + '=Symbol(Pry)')
-        if self.CheckMin() == False:
+        if not self.CheckMin():
             return
         FUN = self.DualFunction
         Fx = diff(FUN, Prx)
