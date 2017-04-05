@@ -1,4 +1,4 @@
-from odenarium import erprint
+import odenarium
 
 def YorN(vopr='(Yes/No)'):
     N=('n','-','0')
@@ -10,4 +10,4 @@ def YorN(vopr='(Yes/No)'):
         elif r in N:
             return False
         else:
-            print('Неверное значение')    
+            odenarium.erprint("Неверное значение")
