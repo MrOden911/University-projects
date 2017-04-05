@@ -1,7 +1,7 @@
 ## Методы оптимизации
 ## Текущая версия 1.0
 
-
+##TODO Оставив функционал выбора переменных функции, ограничить доступ пользователя к коду. Избавиться от "exec".
 
 from odenarium import *
 from sympy import diff, Symbol, solve
@@ -49,7 +49,7 @@ class Dual_iteration:
                 if YorN('Изменить параметры? (Yes/No) '):
                     while True:
                         i = inN0('Введите номер изменяемого параметра, или "0" для сохранения параметров: ',
-                                 'Введен неверный номер!')
+                            'Введен неверный номер!')
                         if i == 0:
                             break
                         elif i == 1:
@@ -86,6 +86,10 @@ class Dual_iteration:
                             erprint('Неверный параметр!')
 
                 else:
+                    if self.DualFunction is not None:
+                        self.ChangeDualFunction()
+                    else:
+                        self.InputDualFunction()
                     if self.Method == 1 or self.Method == 2:
                         self.FirstMethod()
                     elif self.Method == 3:
@@ -102,6 +106,8 @@ class Dual_iteration:
             self.InputDualFunction()
 
     def InputDualFunction(self):
+        if not self.InVar():
+            return
         warprint('Внимание, при вводе неуказанных переменных возможны ошибочные результаты!')
         while True:
             self.DualFunction = inFu('Введите F({0},{1}) = '.format(self.Prx, self.Pry))
@@ -134,16 +140,10 @@ class Dual_iteration:
             return False
 
     def FirstMethod(self):
-        if not self.InVar():
-            return
         Prx = self.Prx
         Pry = self.Pry
         exec(Prx + '=Symbol(Prx)')
         exec(Pry + '=Symbol(Pry)')
-        if self.DualFunction is not None:
-            self.ChangeDualFunction()
-        else:
-            self.InputDualFunction()
         if self.CheckMin() == False:
             return
         FUN = self.DualFunction
@@ -242,16 +242,10 @@ F({0},{1}) = {8}
             return True
 
     def newton(self):
-        if not self.InVar():
-            return
         Prx = self.Prx
         Pry = self.Pry
         exec(Prx + '=Symbol(Prx)')
         exec(Pry + '=Symbol(Pry)')
-        if self.DualFunction != None:
-            self.ChangeDualFunction()
-        else:
-            self.InputDualFunction()
         FUN = self.DualFunction
         XMATRIX = array(([self.StartPoint[0]], [self.StartPoint[0]]))
         print('Начальные точки:', XMATRIX, sep='\n')
