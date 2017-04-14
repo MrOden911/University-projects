@@ -42,7 +42,7 @@ max_hod - максимальное количество шагов\n''')
         self.max_hod = 15
         while True:
             self.method()
-            if not YorN('Продолжить работу с программой? (Yes/No) '):
+            if not YorN('\nПродолжить работу с программой? (Yes/No) '):
                 return
 
     def input_start_tab(self, m, n):
@@ -118,7 +118,7 @@ max_hod - максимальное количество шагов\n''')
                     if zn_qb_list[i] == max(zn_qb_list):
                         acct_list.append(i+1)
                 if len(acct_list) != 1:
-                    print('На шаге №', k, ' можно выбрать между:', sep='')
+                    print('\nНа шаге №', k, ' можно выбрать между:', sep='')
                     for i in acct_list:
                         print('A', i, sep='')
                     while True:
@@ -136,7 +136,7 @@ max_hod - максимальное количество шагов\n''')
                     if zn_pa_list[i] == min(zn_pa_list):
                         acct_list.append(i + 1)
                 if len(acct_list) != 1:
-                    print('На шаге №', k, ' можно выбрать между:', sep='')
+                    print('\nНа шаге №', k, ' можно выбрать между:', sep='')
                     for i in acct_list:
                         print('B', i, sep='')
                     while True:
@@ -172,6 +172,14 @@ max_hod - максимальное количество шагов\n''')
             res_tab.append(str(re_a))
             res_tab.append(str(re_b))
 
+            print('\nШаг №', k, ':', sep='')
+            for i in range(len(zn_pa_list)):
+                print('H(P({0}), B{1}) = {2}'.format(k, i+1, zn_pa_list[i]))
+            print()
+            for i in range(len(zn_qb_list)):
+                print('H(A{1}, Q({0}) = {2}'.format(k, i+1, zn_qb_list[i]))
+
+
             a_list.append(re_a)
             b_list.append(re_b)
             maxa = max(a_list)
@@ -180,14 +188,28 @@ max_hod - максимальное количество шагов\n''')
 
             dk = minb - maxa
             res_tab.append(str(dk))
-
             if dk < 2*E:
                 res_tab.append("<")
                 break
             else:
                 res_tab.append('>')
+            print('\n|{0[0]:^3}|{0[1]:^6}|{0[2]:^6}|{0[3]:^40}|{0[4]:^40}|{0[5]:^7}|{0[6]:^7}|{0[7]:^6}|{0[8]:^6}|{0['
+                  '9]:^6}|{0[10]:^5}|'.format(tab))
+            for k in range(counter):
+                print('|{0:^3}|{1:^6}|{2:^6}|{3:^40}|{4:^40}|{5:^7}|{6:^7}|{7:^6}|{8:^6}|{9:^6}|{10:^5}|'
+                      .format(res_tab[k * 11],
+                              res_tab[1 + k * 11],
+                              res_tab[2 + k * 11],
+                              res_tab[3 + k * 11],
+                              res_tab[4 + k * 11],
+                              res_tab[5 + k * 11],
+                              res_tab[6 + k * 11],
+                              res_tab[7 + k * 11],
+                              res_tab[8 + k * 11],
+                              res_tab[9 + k * 11],
+                              res_tab[10 + k * 11]))
 
-        print('|{0[0]:^3}|{0[1]:^6}|{0[2]:^6}|{0[3]:^40}|{0[4]:^40}|{0[5]:^7}|{0[6]:^7}|{0[7]:^6}|{0[8]:^6}|{0['
+        print('\n|{0[0]:^3}|{0[1]:^6}|{0[2]:^6}|{0[3]:^40}|{0[4]:^40}|{0[5]:^7}|{0[6]:^7}|{0[7]:^6}|{0[8]:^6}|{0['
               '9]:^6}|{0[10]:^5}|'.format(tab))
         for k in range(counter):
             print('|{0:^3}|{1:^6}|{2:^6}|{3:^40}|{4:^40}|{5:^7}|{6:^7}|{7:^6}|{8:^6}|{9:^6}|{10:^5}|'
