@@ -60,6 +60,35 @@ max_hod - максимальное количество шагов\n''')
 
         return start_tab
 
+    def choose_num(self, start_list, var, k):
+        acct_list = []
+        for i in range(len(start_list)):
+            if var == 0:
+                if start_list[i] == max(start_list):
+                    acct_list.append(i + 1)
+            else:
+                if start_list[i] == min(start_list):
+                    acct_list.append(i + 1)
+        if len(acct_list) != 1:
+            print('\nНа шаге №', k, ' можно выбрать между:', sep='')
+            for i in acct_list:
+                if var == 0:
+                    print('A', i, sep='')
+                else:
+                    print('B', i, sep='')
+            while True:
+                choose_a = inN('Выберите номер стратегии: ', 'Введите число из списка!')
+                if choose_a not in acct_list:
+                    print('Неверное число!')
+                else:
+                    break
+            numA = choose_a
+        elif var == 0:
+            numA = 1 + start_list.index(max(start_list))
+        else:
+            numA = 1 + start_list.index(min(start_list))
+        return numA
+
     def method(self):
         m = self.m
         n = self.n
@@ -92,7 +121,7 @@ max_hod - максимальное количество шагов\n''')
                 else:
                     break
 
-        tab = ['k', 'A(k)', 'B(k)', 'P(k)', 'Q(k)', 'aP(k)', 'bQ(k)', 'a(k)', 'b(k)', 'd(k)', '2*E']
+
         res_tab = []
         a_summ = zeros(m)
         b_summ = zeros(n)
@@ -113,41 +142,9 @@ max_hod - максимальное количество шагов\n''')
                     acct_list.append(start_tab[:, i].sum())
                 numB = 1 + acct_list.index(min(acct_list))
             elif k != 1:
-                acct_list.clear()
-                for i in range(len(zn_qb_list)):
-                    if zn_qb_list[i] == max(zn_qb_list):
-                        acct_list.append(i+1)
-                if len(acct_list) != 1:
-                    print('\nНа шаге №', k, ' можно выбрать между:', sep='')
-                    for i in acct_list:
-                        print('A', i, sep='')
-                    while True:
-                        choose_a = inN('Выберите номер стратегии: ', 'Введите число из списка!')
-                        if choose_a not in acct_list:
-                            print('Неверное число!')
-                        else:
-                            break
-                    numA = choose_a
-                else:
-                    numA = 1 + zn_qb_list.index(max(zn_qb_list))
+                numA = self.choose_num(zn_qb_list, 0, k)
+                numB = self.choose_num(zn_pa_list, 1, k)
 
-                acct_list.clear()
-                for i in range(len(zn_pa_list)):
-                    if zn_pa_list[i] == min(zn_pa_list):
-                        acct_list.append(i + 1)
-                if len(acct_list) != 1:
-                    print('\nНа шаге №', k, ' можно выбрать между:', sep='')
-                    for i in acct_list:
-                        print('B', i, sep='')
-                    while True:
-                        choose_b = inN('Выберите номер стратегии: ', 'Введите число из списка!')
-                        if choose_b not in acct_list:
-                            print('Неверное число!')
-                        else:
-                            break
-                    numB = choose_b
-                else:
-                    numB = 1 + zn_pa_list.index(min(zn_pa_list))
             res_tab.extend([str(numA), str(numB)])
             a_summ[numA - 1] += 1
             b_summ[numB - 1] += 1
@@ -193,40 +190,28 @@ max_hod - максимальное количество шагов\n''')
                 break
             else:
                 res_tab.append('>')
-            print('\n|{0[0]:^3}|{0[1]:^6}|{0[2]:^6}|{0[3]:^40}|{0[4]:^40}|{0[5]:^7}|{0[6]:^7}|{0[7]:^6}|{0[8]:^6}|{0['
-                  '9]:^6}|{0[10]:^5}|'.format(tab))
-            for k in range(counter):
-                print('|{0:^3}|{1:^6}|{2:^6}|{3:^40}|{4:^40}|{5:^7}|{6:^7}|{7:^6}|{8:^6}|{9:^6}|{10:^5}|'
-                      .format(res_tab[k * 11],
-                              res_tab[1 + k * 11],
-                              res_tab[2 + k * 11],
-                              res_tab[3 + k * 11],
-                              res_tab[4 + k * 11],
-                              res_tab[5 + k * 11],
-                              res_tab[6 + k * 11],
-                              res_tab[7 + k * 11],
-                              res_tab[8 + k * 11],
-                              res_tab[9 + k * 11],
-                              res_tab[10 + k * 11]))
+            self.output_tab(res_tab, counter)
+        self.output_tab(res_tab, counter)
+        return
 
+    def output_tab(self, res_tab, counter):
+        tab = ['k', 'A(k)', 'B(k)', 'P(k)', 'Q(k)', 'aP(k)', 'bQ(k)', 'a(k)', 'b(k)', 'd(k)', '2*E']
         print('\n|{0[0]:^3}|{0[1]:^6}|{0[2]:^6}|{0[3]:^40}|{0[4]:^40}|{0[5]:^7}|{0[6]:^7}|{0[7]:^6}|{0[8]:^6}|{0['
               '9]:^6}|{0[10]:^5}|'.format(tab))
         for k in range(counter):
             print('|{0:^3}|{1:^6}|{2:^6}|{3:^40}|{4:^40}|{5:^7}|{6:^7}|{7:^6}|{8:^6}|{9:^6}|{10:^5}|'
-                .format(res_tab[k * 11],
-                        res_tab[1 + k * 11],
-                        res_tab[2 + k * 11],
-                        res_tab[3 + k * 11],
-                        res_tab[4 + k * 11],
-                        res_tab[5 + k * 11],
-                        res_tab[6 + k * 11],
-                        res_tab[7 + k * 11],
-                        res_tab[8 + k * 11],
-                        res_tab[9 + k * 11],
-                        res_tab[10 + k * 11]))
-
+                  .format(res_tab[k * 11],
+                          res_tab[1 + k * 11],
+                          res_tab[2 + k * 11],
+                          res_tab[3 + k * 11],
+                          res_tab[4 + k * 11],
+                          res_tab[5 + k * 11],
+                          res_tab[6 + k * 11],
+                          res_tab[7 + k * 11],
+                          res_tab[8 + k * 11],
+                          res_tab[9 + k * 11],
+                          res_tab[10 + k * 11]))
         return
-
 
 start = BrownRobinson()
 start.starter()
