@@ -1,6 +1,7 @@
-from odenarium import *
 from numpy import zeros, array, dot
 from sympy import Rational
+
+from odenarium import *
 
 
 class BrownRobinson:
@@ -12,52 +13,52 @@ m - количество стратегий игрока A
 n - количество стратегий игрока B
 E - погрешность
 max_hod - максимальное количество шагов\n''')
-        # while True:
-        #     self.m = inN("Введите m: ", "Число должно быть натуральным, больше 1.")
-        #     if self.m <= 1:
-        #         erprint('Число меньше или равно 1!')
-        #     else:
-        #         break
-        # while True:
-        #     self.n = inN("Введите n: ", "Число должно быть натуральным, больше 1.")
-        #     if self.n <= 1:
-        #         erprint('Число меньше или равно 1!')
-        #     else:
-        #         break
-        # while True:
-        #     self.E = inFl('Введите E: ', "E должно быть числом большим 0")
-        #     if self.E <= 0:
-        #         erprint('Число меньше или равно 0!')
-        #     else:
-        #         break
-        # while True:
-        #     self.max_hod = inN('Введите max_hod: ', "max_hod должно быть натуральным числом большим 0")
-        #     if self.E <= 0:
-        #         erprint('Число меньше или равно 0!')
-        #     else:
-        #         break
-        self.m = 3
-        self.n = 4
-        self.E = 0.1
-        self.max_hod = 15
+        warprint('Внимание! Программа работает только с целыми стартовыми значениями.')
+        while True:
+            self.m = inN("Введите m: ", "Число должно быть натуральным, больше 1.")
+            if self.m <= 1:
+                erprint('Число меньше или равно 1!')
+            else:
+                break
+        while True:
+            self.n = inN("Введите n: ", "Число должно быть натуральным, больше 1.")
+            if self.n <= 1:
+                erprint('Число меньше или равно 1!')
+            else:
+                break
+        while True:
+            self.E = inFl('Введите E: ', "E должно быть числом большим 0")
+            if self.E <= 0:
+                erprint('Число меньше или равно 0!')
+            else:
+                break
+        while True:
+            self.max_hod = inN('Введите max_hod: ', "max_hod должно быть натуральным числом большим 0")
+            if self.max_hod <= 0:
+                erprint('Число меньше или равно 0!')
+            else:
+                break
+        # self.m = 3
+        # self.n = 4
+        # self.E = 0.1
+        # self.max_hod = 15
         while True:
             self.method()
             if not YorN('\nПродолжить работу с программой? (Yes/No) '):
                 return
 
     def input_start_tab(self, m, n):
-        start_tab = zeros((m, n))
+        start_tab = zeros((m, n), dtype='float32')
         print('Ввод матрицы A:')
         for i in range(m):
             for j in range(n):
                 while True:
-                    vvod = inFl('Значение ячейки A{0}B{1}: '.format(i+1, j+1), 'Значение должно быть числом большим 0')
-                    if vvod <= 0:
+                    vvod = inInt('Значение ячейки A{0}B{1}: '.format(i+1, j+1), 'Значение должно быть числом большим 0')
+                    if vvod < 0:
                         erprint('Введено число меньшее 0!')
                     else:
                         break
                 start_tab[i, j] = vvod
-
         return start_tab
 
     def choose_num(self, start_list, var, k):
@@ -94,19 +95,21 @@ max_hod - максимальное количество шагов\n''')
         n = self.n
         E = self.E
         max_hod = self.max_hod
-        # while True:
-        #     start_tab = self.input_start_tab(m, n)
-        #     print('Получившаяся Таблица:')
-        #     print('A = \n', start_tab)
-        #     if YorN('Таблица верна? Yes/No' ):
-        #         break
-        start_tab = array([[2, 3, 2, 4],
-                           [3, 2, 4, 1],
-                           [4, 1, 3, 2]])
-        print(start_tab)
+        while True:
+            start_tab = self.input_start_tab(m, n)
+            print('Получившаяся Таблица:')
+            print('A =')
+            print(start_tab)
+            if YorN('Таблица верна? (Yes/No) '):
+                break
+        # start_tab = array([[2, 3, 2, 4],
+        #                    [3, 2, 4, 1],
+        #                    [4, 1, 3, 2]])
+        # print(start_tab)
 
         numA = ''
         numB = ''
+
         if YorN('Выбрать вручную стратегии A и B на первом шаге? (Yes/No) '):
             while True:
                 numA = inN('Введите № стратегии игрока A: ')
@@ -120,7 +123,6 @@ max_hod - максимальное количество шагов\n''')
                     erprint('Число вне заданного количества!')
                 else:
                     break
-
 
         res_tab = []
         a_summ = zeros(m)
@@ -152,7 +154,7 @@ max_hod - максимальное количество шагов\n''')
             pa_list = []
             qb_list = []
             for i in range(m):
-                pa_list.append(Rational(a_summ[i], k))
+                pa_list.append(a_summ[i]/k)
             for i in range(n):
                 qb_list.append(Rational(b_summ[i], k))
             res_tab.append('P(' + str(k) + ') = ' + str(pa_list))
@@ -168,14 +170,12 @@ max_hod - максимальное количество шагов\n''')
             re_b = max(zn_qb_list)
             res_tab.append(str(re_a))
             res_tab.append(str(re_b))
-
             print('\nШаг №', k, ':', sep='')
             for i in range(len(zn_pa_list)):
-                print('H(P({0}), B{1}) = {2}'.format(k, i+1, zn_pa_list[i]))
+                print('H(P({0}), B{1}) = {2}'.format(k, i+1, Rational(zn_pa_list[i])))
             print()
             for i in range(len(zn_qb_list)):
-                print('H(A{1}, Q({0}) = {2}'.format(k, i+1, zn_qb_list[i]))
-
+                print('H(A{1}, Q({0})) = {2}'.format(k, i+1, Rational(zn_qb_list[i])))
 
             a_list.append(re_a)
             b_list.append(re_b)
@@ -196,10 +196,10 @@ max_hod - максимальное количество шагов\n''')
 
     def output_tab(self, res_tab, counter):
         tab = ['k', 'A(k)', 'B(k)', 'P(k)', 'Q(k)', 'aP(k)', 'bQ(k)', 'a(k)', 'b(k)', 'd(k)', '2*E']
-        print('\n|{0[0]:^3}|{0[1]:^6}|{0[2]:^6}|{0[3]:^40}|{0[4]:^40}|{0[5]:^7}|{0[6]:^7}|{0[7]:^6}|{0[8]:^6}|{0['
-              '9]:^6}|{0[10]:^5}|'.format(tab))
+        print('\n|{0[0]:^3}|{0[1]:^6}|{0[2]:^6}|{0[3]:^40}|{0[4]:^40}|{0[5]:^10}|{0[6]:^10}|{0[7]:^9}|{0[8]:^9}|{0['
+              '9]:^9}|{0[10]:^5}|'.format(tab))
         for k in range(counter):
-            print('|{0:^3}|{1:^6}|{2:^6}|{3:^40}|{4:^40}|{5:^7}|{6:^7}|{7:^6}|{8:^6}|{9:^6}|{10:^5}|'
+            print('|{0:^3}|{1:^6}|{2:^6}|{3:^40}|{4:^40}|{5:^10}|{6:^10}|{7:^9}|{8:^9}|{9:^9}|{10:^5}|'
                   .format(res_tab[k * 11],
                           res_tab[1 + k * 11],
                           res_tab[2 + k * 11],
