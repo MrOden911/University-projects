@@ -1,6 +1,6 @@
 import csv
 from yahoo_finance import Share
-
+from pprint import pprint
 
 def get_data(tick):
     try:
@@ -16,6 +16,7 @@ for line in TickFile:
 TickFile.close()
 
 
+error_tick = {}
 for tick in tickers:
     print('\nТикер: ', tick)
     yah = get_data(tick)
@@ -24,6 +25,7 @@ for tick in tickers:
     except Exception as e:
         print('Тикер {} пропущен.'.format(tick))
         print('Причина: ', e)
+        error_tick.update({tick: e})
         continue
     with open('data/' + tick + '.csv', 'w') as csvfile:
         write = csv.writer(csvfile)
@@ -32,4 +34,6 @@ for tick in tickers:
     csvfile.close()
     print('Тикер {} загружен.'.format(tick))
 
-print('Завершено')
+print('\nОшибочные тикеры:')
+pprint(error_tick)
+print('\nЗавершено')
