@@ -23,7 +23,7 @@ def download(tickers):
             print('Причина: ', e)
             error_tick.update({tick: e})
             continue
-        with open('data/' + tick + '.csv', 'w') as csvfile:
+        with open('data/Yahoo/' + tick + '.csv', 'w') as csvfile:
             write = csv.writer(csvfile)
             for position in yah:
                 write.writerow([position['Adj_Close']])
